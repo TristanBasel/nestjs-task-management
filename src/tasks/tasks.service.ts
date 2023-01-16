@@ -32,4 +32,10 @@ export class TasksService {
   deleteTask(id: string): void {
     this.tasks = this.tasks.filter((task) => task.id !== id); // remove the task that has the task id passed in.
   }
+
+  updateTaskStatus(id: string, status: TaskStatus): Task {
+    const task = this.getTaskByID(id);
+    task.status = status;
+    return task;
+  }
 }
