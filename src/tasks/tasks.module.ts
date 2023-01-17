@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TasksRepository } from './tasks.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TasksRepository])], // allows for dependancy injection.
+  imports: [TypeOrmModule.forFeature([TasksRepository])], // allows for dependency injection.
   controllers: [TasksController],
   providers: [TasksService],
 })
