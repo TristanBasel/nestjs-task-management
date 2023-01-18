@@ -21,10 +21,11 @@ export class TasksRepository extends Repository<Task> {
     return task;
   }
 
-  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+  async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
 
     const query = this.createQueryBuilder('task');
+    query.where({ user }); // only those by the current user.
 
     if (status) {
       query.andWhere('task.status = :status', { status: 'OPEN' }); //&&
@@ -32,7 +33,7 @@ export class TasksRepository extends Repository<Task> {
 
     if (search) {
       query.andWhere(
-        'LOWER(task.title) LIKE :search OR LOWER(task.description) LIKE LOWER(:search)',
+        '(LOWER(task.title) LIKE :search OR LOWER(task.description) LIKE LOWER(:search))', // change on this line is a bug fix.
         { search: `%${search}%` },
       );
     }
