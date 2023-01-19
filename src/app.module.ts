@@ -3,12 +3,14 @@ import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as process from 'process';
+import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.stage.${process.env.STAGE}`], // this STAGE, we add to package.json
-      // load: [configuration],
+      validationSchema: configValidationSchema,
     }),
     TasksModule,
     TypeOrmModule.forRootAsync({
@@ -34,7 +36,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           host: configService.get<string>('DB_HOST'),
           port: configService.get<number>('DB_PORT'),
           username: configService.get<string>('DB_USERNAME'),
-          password: configService.get<string>('POSTGRES_PASSWORD'),
+          password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_DATABASE'),
         };
       },
